@@ -50,19 +50,33 @@
         },
         {
           "image": "/uploads/this-is-f__ked.png",
-          "title": "Being A Nigerian Woman In 2026"
+          "title": "Being A Nigerian Woman In 2026",
+          "platforms": [
+            "youtube"
+          ]
         },
         {
           "image": "/uploads/this-is-fked-1-.png",
-          "title": "How Mark Zuckerberg Won Social Media"
+          "title": "How Mark Zuckerberg Won Social Media",
+          "platforms": [
+            "youtube",
+            "spotify"
+          ]
         },
         {
           "image": "/uploads/this-is-fked-2-.png",
-          "title": "How The Macbook Changed Creativity Forever"
+          "title": "How The Macbook Changed Computers Forever",
+          "platforms": [
+            "youtube"
+          ]
         },
         {
           "image": "/uploads/this-is-fked.png",
-          "title": "When Did Women Stop Being..............."
+          "title": "When Did Women Stop Being...............",
+          "platforms": [
+            "youtube",
+            "spotify"
+          ]
         }
       ]
     }
