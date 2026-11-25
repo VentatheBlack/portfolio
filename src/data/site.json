@@ -3,13 +3,8 @@
   "role": "Video Editor",
   "location": "Lagos",
   "tagline": "Turning raw footage into stories people remember.",
-  "page_title": "TEMIDIRE | Video Editor",
-  "seo_description": "TEMIDIRE is a Video Editor in Lagos. Short-form, long-form and podcast editing for brands and creators.",
-  "theme": "dark",
-  "accent_primary": "#DCD0FF",
-  "accent_secondary": "#C0C0C0",
   "hero_media": "",
-  "showreel_vimeo": "",
+  "showreel_vimeo": "https://vimeo.com/1250158873?fl=ip&fe=ec&share=copy",
   "about_text": "I’m a video editor interested in turning ideas, footage, and stories into videos that are engaging, intentional, and worth watching. I approach editing as more than just cutting clips together; it’s about understanding what a video needs to communicate and finding the right way to communicate it through pacing, structure, sound, and visuals.\n\nMy interests span content creation, digital storytelling, and the creative side of building brands and communicating ideas. I’m particularly drawn to editing that feels natural, thoughtfully paced, and visually compelling without unnecessarily complicating the story.\n\nI’m constantly learning, experimenting, and refining my approach, with the goal of helping creators, businesses, and brands communicate better through video.",
   "about_photo": "/uploads/temidire-about.jpg",
   "contact_background": "/uploads/contact-background.jpg",
@@ -26,5 +21,10 @@
     }
   ],
   "contact_heading": "Let’s work together",
-  "contact_ticker": "LET’S CREATE 〰 GET IN TOUCH"
+  "contact_ticker": "LET’S CREATE 〰 GET IN TOUCH",
+  "accent_primary": "#DCD0FF",
+  "accent_secondary": "#C0C0C0",
+  "theme": "dark",
+  "page_title": "TEMIDIRE | Video Editor",
+  "seo_description": "TEMIDIRE is a Video Editor in Lagos. Short-form, long-form and podcast editing for brands and creators."
 }
