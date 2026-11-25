@@ -66,6 +66,7 @@ report('Skeleton shimmer loops continuously', html.includes('infinite skeleton-s
 report('Phones limit empty tabs to three placeholders', /skeleton-grid>li:nth-child\(n\+4\)/.test(html));
 report('Styled direthecreative wordmark is present', html.includes('class="brand-word"'));
 report('Contact background image is present', html.includes('class="contact-background"'));
+report('System-aware theme toggle is present', html.includes('data-theme="auto"') && html.includes('data-theme-toggle'));
 report('Reduced motion is supported', html.includes('prefers-reduced-motion'));
 
 const cards = (html.match(/data-vimeo-id=/g) || []).length;

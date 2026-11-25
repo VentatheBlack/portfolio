@@ -65,7 +65,7 @@ collections:
           - label: Colours
             name: theme
             widget: select
-            default: dark
+            default: auto
             options:
               - { label: Dark, value: dark }
               - { label: Light, value: light }

@@ -1,8 +1,58 @@
 ---
-// One small script for all lazy Vimeo players and full-size thumbnail previews.
+// One small global script for theme controls, lazy Vimeo players and image previews.
 ---
 <script is:inline>
   (function () {
+    var root = document.documentElement;
+    var themeButton = document.querySelector('[data-theme-toggle]');
+    var systemTheme = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    var savedTheme = '';
+    try { savedTheme = localStorage.getItem('portfolio-theme') || ''; } catch (error) {}
+    if (savedTheme === 'light' || savedTheme === 'dark') root.setAttribute('data-theme', savedTheme);
+
+    function resolvedTheme() {
+      var mode = root.getAttribute('data-theme') || 'auto';
+      if (mode === 'auto') return systemTheme && systemTheme.matches ? 'dark' : 'light';
+      return mode;
+    }
+
+    function updateThemeControl() {
+      var mode = root.getAttribute('data-theme') || 'auto';
+      var resolved = resolvedTheme();
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', resolved === 'dark' ? '#090909' : '#f4f3f1');
+      if (!themeButton) return;
+      var label = mode === 'auto'
+        ? 'Theme follows system (' + resolved + '). Switch to ' + (resolved === 'dark' ? 'light' : 'dark') + ' mode'
+        : mode.charAt(0).toUpperCase() + mode.slice(1) + ' mode selected. Return to system theme';
+      themeButton.setAttribute('aria-label', label);
+      themeButton.setAttribute('title', label);
+      themeButton.setAttribute('aria-pressed', mode === 'auto' ? 'false' : 'true');
+    }
+
+    if (themeButton) {
+      themeButton.addEventListener('click', function () {
+        var mode = root.getAttribute('data-theme') || 'auto';
+        if (mode === 'auto') {
+          var next = resolvedTheme() === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          try { localStorage.setItem('portfolio-theme', next); } catch (error) {}
+        } else {
+          root.setAttribute('data-theme', 'auto');
+          try { localStorage.removeItem('portfolio-theme'); } catch (error) {}
+        }
+        updateThemeControl();
+      });
+    }
+    if (systemTheme) {
+      var systemChanged = function () {
+        if ((root.getAttribute('data-theme') || 'auto') === 'auto') updateThemeControl();
+      };
+      if (systemTheme.addEventListener) systemTheme.addEventListener('change', systemChanged);
+      else if (systemTheme.addListener) systemTheme.addListener(systemChanged);
+    }
+    updateThemeControl();
+
     var dialog = document.getElementById('player');
     var box = dialog ? dialog.querySelector('.player-box') : null;
     var lastOpener = null;
