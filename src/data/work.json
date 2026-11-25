@@ -17,7 +17,12 @@
           "title": "The House Of Sovereign"
         }
       ],
-      "thumbnails": []
+      "thumbnails": [
+        {
+          "title": "house of sovereign",
+          "image": "/uploads/sovereign-shoot-2.png"
+        }
+      ]
     },
     {
       "title": "Podcasts",
