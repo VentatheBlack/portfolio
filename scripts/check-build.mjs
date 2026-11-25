@@ -99,6 +99,7 @@ if (existsSync(adminConfigPath)) {
   report('Admin config has no placeholder words', !hasLeftover(config));
   report('Admin config has no tab characters', !/\t/.test(config));
   report('Admin config has all four editing areas', ['name: site', 'name: services', 'name: work', 'name: cases'].every((word) => config.includes(word)));
+  report('Admin supports custom video covers', config.includes('name: poster'));
 }
 
 const astroConfig = await readFile(fileURLToPath(new URL('../astro.config.mjs', import.meta.url)), 'utf8');

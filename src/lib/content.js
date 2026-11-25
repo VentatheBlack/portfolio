@@ -51,14 +51,17 @@ export function buildVideo(raw, shape = 'wide') {
   const info = vimeoInfo(parsed.id);
   const width = info.width || (shape === 'vertical' ? 1080 : 1920);
   const height = info.height || (shape === 'vertical' ? 1920 : 1080);
+  const poster = String(raw.poster || '').trim();
+  const posterWidth = shape === 'vertical' ? 900 : 1600;
+  const posterHeight = shape === 'vertical' ? 1600 : 900;
   return {
     title: raw.title || info.title || 'Video',
     note: raw.note || '',
     id: parsed.id,
     hash: parsed.hash,
-    thumb: info.thumb || '',
-    thumbWidth: info.thumbWidth || 960,
-    thumbHeight: info.thumbHeight || 540,
+    thumb: poster || info.thumb || '',
+    thumbWidth: poster ? posterWidth : info.thumbWidth || 960,
+    thumbHeight: poster ? posterHeight : info.thumbHeight || 540,
     ratio: `${width} / ${height}`,
     ratioNumber: Number((width / height).toFixed(4)),
     ...tagAndPlatforms(raw),

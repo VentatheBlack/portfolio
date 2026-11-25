@@ -133,6 +133,11 @@ collections:
                     widget: string
                     hint: "Paste the Vimeo link"
                     pattern: ['^(https?://)?(www\.|player\.)?vimeo\.com/.+', "This must be a Vimeo link"]
+                  - label: Custom video cover
+                    name: poster
+                    widget: image
+                    required: false
+                    hint: "Optional image shown over this video before play is pressed. Vertical videos work best with a 9:16 cover; wide videos with 16:9. Keep it under 500 KB."
                   - label: Also on
                     name: platforms
                     widget: select
@@ -149,13 +154,13 @@ collections:
                   - { label: Person's social tag, name: tag, widget: string, required: false }
                   - { label: Link for that tag, name: tag_link, widget: string, required: false }
                   - { label: What I did, name: note, widget: string, required: false }
-              - label: Thumbnail pictures shown in this tab
+              - label: Separate picture cards shown in this tab
                 name: thumbnails
                 widget: list
                 label_singular: Thumbnail
                 required: false
                 summary: "{{fields.title}}"
-                hint: "Export at 1280 x 720 as a JPG under 500 KB."
+                hint: "These become their own cards; they are not video covers. For a video cover, use Custom video cover inside that video. Export separate cards at 1280 x 720 as a JPG under 500 KB."
                 fields:
                   - { label: Title, name: title, widget: string }
                   - { label: Picture, name: image, widget: image }

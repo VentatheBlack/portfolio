@@ -79,6 +79,7 @@ if (work) {
     for (const video of section.videos || []) {
       videoCount++;
       if (!parseVimeo(video.vimeo)) problem(`work.json: "${video.title}" in tab "${section.title}" does not have a valid Vimeo link`);
+      checkFile(video.poster, `work.json "${video.title}" custom cover`);
       checkPlatforms(video.platforms, `work.json "${video.title}"`);
     }
     for (const thumb of section.thumbnails || []) {

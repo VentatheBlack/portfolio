@@ -14,15 +14,11 @@
       "videos": [
         {
           "vimeo": "https://vimeo.com/1249976453?fl=ip&fe=ec&share=copy",
-          "title": "The House Of Sovereign"
+          "title": "The House Of Sovereign",
+          "poster": "/uploads/sovereign-shoot-cover.jpg"
         }
       ],
-      "thumbnails": [
-        {
-          "title": "house of sovereign",
-          "image": "/uploads/sovereign-shoot-2.png"
-        }
-      ]
+      "thumbnails": []
     },
     {
       "title": "Podcasts",
