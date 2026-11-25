@@ -61,6 +61,8 @@ const sections = [
     count: caseItems.length,
   },
 ];
+const firstPopulatedIndex = sections.findIndex((section) => section.count > 0);
+const initialSectionIndex = firstPopulatedIndex >= 0 ? firstPopulatedIndex : 0;
 
 const whatsappDigits = String(site.whatsapp || '').match(/wa\.me\/(\d+)/)?.[1] || '';
 const whatsappDisplay = whatsappDigits.startsWith('234') && whatsappDigits.length === 13
@@ -129,8 +131,8 @@ const title = site.page_title || `${site.name} | ${site.role}`;
               id={`tab-${index}`}
               data-slug={section.slug}
               aria-controls={`panel-${index}`}
-              aria-selected={index === 0 ? 'true' : 'false'}
-              tabindex={index === 0 ? 0 : -1}
+              aria-selected={index === initialSectionIndex ? 'true' : 'false'}
+              tabindex={index === initialSectionIndex ? 0 : -1}
             >{section.title}</button>
           ))}
         </div>
@@ -138,12 +140,12 @@ const title = site.page_title || `${site.name} | ${site.role}`;
 
       {sections.map((section, index) => (
         <div
-          class={`panel${index === 0 && section.count === 0 ? ' animate' : ''}`}
+          class={`panel${index === initialSectionIndex && section.count === 0 ? ' animate' : ''}`}
           role="tabpanel"
           id={`panel-${index}`}
           aria-labelledby={`tab-${index}`}
           data-shape={section.shape}
-          hidden={index !== 0}
+          hidden={index !== initialSectionIndex}
         >
           {section.blurb && <p class="panel-blurb">{section.blurb}</p>}
 
