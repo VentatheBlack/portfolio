@@ -5,16 +5,7 @@
       "blurb": "",
       "shape": "wide",
       "videos": [],
-      "thumbnails": [
-        {
-          "image": "/uploads/doc2.jpg",
-          "title": "Google Created The Best AI",
-          "platforms": [
-            "youtube",
-            "spotify"
-          ]
-        }
-      ]
+      "thumbnails": []
     },
     {
       "title": "Short form",
@@ -35,7 +26,16 @@
       "blurb": "",
       "shape": "wide",
       "videos": [],
-      "thumbnails": []
+      "thumbnails": [
+        {
+          "image": "/uploads/doc2.jpg",
+          "title": "Google Created The Best AI",
+          "platforms": [
+            "youtube",
+            "spotify"
+          ]
+        }
+      ]
     }
   ]
 }

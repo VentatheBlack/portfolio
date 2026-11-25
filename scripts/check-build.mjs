@@ -57,6 +57,8 @@ report('Five Work tabs are available', (html.match(/<button[^>]+role="tab"/g) ||
 report('Case studies are inside the Work tabs', html.includes('>Case studies<'));
 report('Empty Work tabs have intentional placeholders', html.includes('Projects coming soon'));
 report('Work cards use a responsive grid', html.includes('class="work-grid'));
+report('Skeleton shimmer loops continuously', html.includes('infinite skeleton-sheen'));
+report('Phones limit empty tabs to three placeholders', /skeleton-grid>li:nth-child\(n\+4\)/.test(html));
 report('Styled direthecreative wordmark is present', html.includes('class="brand-word"'));
 report('Contact background image is present', html.includes('class="contact-background"'));
 report('Reduced motion is supported', html.includes('prefers-reduced-motion'));

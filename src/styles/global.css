@@ -270,7 +270,7 @@ html[data-theme="light"] .topbar {
   inset: -30%;
   background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.14) 48%, rgba(220,208,255,0.18) 52%, transparent 62%);
   transform: translateX(-70%);
-  animation: hero-sheen 3s ease-in-out 2;
+  animation: hero-sheen 3s ease-in-out infinite;
 }
 
 @keyframes hero-sheen {
@@ -556,7 +556,7 @@ html[data-theme="light"] .topbar {
 a.handle:hover { color: var(--text); }
 .caption .note { flex-basis: 100%; color: var(--muted); font-size: 0.76rem; }
 
-/* Empty-work skeletons: two slow passes, then they become still. */
+/* Empty-work skeletons keep a slow shimmer so empty tabs feel active. */
 .skeleton-card { cursor: default; }
 .skeleton-media,
 .skeleton-line {
@@ -603,7 +603,7 @@ a.handle:hover { color: var(--text); }
 .skeleton-card:hover .skeleton-media::before,
 .skeleton-card:focus-within .skeleton-media::before { opacity: 1; transform: none; }
 .panel.animate .skeleton-media::after,
-.panel.animate .skeleton-line::after { animation: skeleton-sheen 2.4s ease-in-out 2; }
+.panel.animate .skeleton-line::after { animation: skeleton-sheen 2.4s ease-in-out infinite; }
 @keyframes skeleton-sheen { to { transform: translateX(120%); } }
 
 /* ---------------------------------------------------------------
@@ -946,6 +946,7 @@ dialog#player::backdrop { background: rgba(5,5,6,0.96); }
   .work { padding-top: 82px; }
   .tablist { gap: 20px; }
   .work-grid { grid-template-columns: 1fr; gap-block: 42px; }
+  .skeleton-grid > li:nth-child(n + 4) { display: none; }
   .about { grid-template-columns: 1fr; }
   .about-photo { width: min(78vw, 360px); }
   .about-tagline { margin-top: 34px; }

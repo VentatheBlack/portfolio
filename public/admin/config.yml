@@ -109,7 +109,7 @@ collections:
             widget: list
             label_singular: Tab
             summary: "{{fields.title}}"
-            hint: "Case studies are managed in their own area and appear automatically as the fifth tab."
+            hint: "Open the item named Thumbnails to add thumbnail designs. Anything added inside Long form, Short form or Podcasts appears in that tab. Case studies are managed separately."
             fields:
               - { label: Tab name, name: title, widget: string }
               - { label: Short line under the tabs, name: blurb, widget: text, required: false }
@@ -120,7 +120,7 @@ collections:
                 options:
                   - { label: Wide, value: wide }
                   - { label: Vertical, value: vertical }
-              - label: Videos
+              - label: Videos shown in this tab
                 name: videos
                 widget: list
                 label_singular: Video
@@ -149,7 +149,7 @@ collections:
                   - { label: Person's social tag, name: tag, widget: string, required: false }
                   - { label: Link for that tag, name: tag_link, widget: string, required: false }
                   - { label: What I did, name: note, widget: string, required: false }
-              - label: Thumbnails
+              - label: Thumbnail pictures shown in this tab
                 name: thumbnails
                 widget: list
                 label_singular: Thumbnail
