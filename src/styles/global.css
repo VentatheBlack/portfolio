@@ -945,7 +945,23 @@ dialog#player::backdrop { background: rgba(5,5,6,0.96); }
   .scroll-cue { bottom: 18px; }
   .work { padding-top: 82px; }
   .tablist { gap: 20px; }
-  .work-grid { grid-template-columns: 1fr; gap-block: 42px; }
+  .work-grid {
+    display: flex;
+    width: calc(100% + var(--gutter));
+    gap: 16px;
+    padding-right: var(--gutter);
+    padding-bottom: 16px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .work-grid::-webkit-scrollbar { display: none; }
+  .work-grid > li {
+    flex: 0 0 min(82vw, 360px);
+    scroll-snap-align: start;
+  }
+  .panel[data-shape="vertical"] .work-grid > li { flex-basis: min(72vw, 280px); }
   .skeleton-grid > li:nth-child(n + 4) { display: none; }
   .about { grid-template-columns: 1fr; }
   .about-photo { width: min(78vw, 360px); }

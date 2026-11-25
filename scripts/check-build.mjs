@@ -35,6 +35,10 @@ if (!existsSync(join(DIST, 'index.html'))) {
 }
 
 const html = await readFile(join(DIST, 'index.html'), 'utf8');
+const cssSource = await readFile(fileURLToPath(new URL('../src/styles/global.css', import.meta.url)), 'utf8');
+const mobileCssStart = cssSource.indexOf('@media (max-width: 620px)');
+const mobileCssEnd = cssSource.indexOf('@media (max-width: 390px)');
+const mobileCss = mobileCssStart >= 0 ? cssSource.slice(mobileCssStart, mobileCssEnd > mobileCssStart ? mobileCssEnd : undefined) : '';
 const htmlKb = Math.round(Buffer.byteLength(html) / 1024);
 report('Home page HTML is small (under 80 KB)', htmlKb < 80, `${htmlKb} KB`);
 report('CSS is inside the page (no separate stylesheet)', !/<link[^>]+rel=["']stylesheet["']/i.test(html));
@@ -57,6 +61,7 @@ report('Five Work tabs are available', (html.match(/<button[^>]+role="tab"/g) ||
 report('Case studies are inside the Work tabs', html.includes('>Case studies<'));
 report('Empty Work tabs have intentional placeholders', html.includes('Projects coming soon'));
 report('Work cards use a responsive grid', html.includes('class="work-grid'));
+report('Phones use horizontal swipe rows for Work', mobileCss.includes('display: flex') && mobileCss.includes('overflow-x: auto') && mobileCss.includes('scroll-snap-type: x mandatory'));
 report('Skeleton shimmer loops continuously', html.includes('infinite skeleton-sheen'));
 report('Phones limit empty tabs to three placeholders', /skeleton-grid>li:nth-child\(n\+4\)/.test(html));
 report('Styled direthecreative wordmark is present', html.includes('class="brand-word"'));
@@ -107,7 +112,7 @@ sizes.sort((a, b) => b.bytes - a.bytes);
 const MAX = 25 * 1024 * 1024;
 report('No file bigger than 25 MiB', sizes.every((s) => s.bytes < MAX));
 for (const s of sizes) {
-  const path = s.file.replace(/\\/g, '/');
+  const path = ('/' + s.file.replace(/\\/g, '/')).replace(/\/+/g, '/');
   if (!path.startsWith('/uploads/')) continue;
   const isLoop = /\.(gif|mp4|webm)$/i.test(path);
   const limit = isLoop ? 2 * 1024 * 1024 : 1024 * 1024;
