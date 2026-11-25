@@ -9,9 +9,14 @@
     },
     {
       "title": "Short form",
-      "blurb": "",
+      "blurb": "Fashion Brand",
       "shape": "vertical",
-      "videos": [],
+      "videos": [
+        {
+          "vimeo": "https://vimeo.com/1249976453?fl=ip&fe=ec&share=copy",
+          "title": "The House Of Sovereign"
+        }
+      ],
       "thumbnails": []
     },
     {
@@ -33,41 +38,6 @@
           "platforms": [
             "youtube",
             "spotify"
-          ]
-        },
-        {
-          "image": "/uploads/this-is-f__ked-1-.png",
-          "title": "What Does It Mean To Be A Yoruba Man",
-          "platforms": [
-            "youtube"
-          ]
-        },
-        {
-          "image": "/uploads/this-is-fked-2-.png",
-          "title": "How apple Created The Macbook",
-          "platforms": [
-            "youtube"
-          ]
-        },
-        {
-          "image": "/uploads/this-is-f__ked.png",
-          "title": "Living As A Woman In Nigeria",
-          "platforms": [
-            "youtube"
-          ]
-        },
-        {
-          "image": "/uploads/this-is-fked-1-.png",
-          "title": "How Mark Zuckerberg Won Social Media",
-          "platforms": [
-            "youtube"
-          ]
-        },
-        {
-          "image": "/uploads/this-is-fked.png",
-          "title": "Do Nigerian Women really Lack...........",
-          "platforms": [
-            "youtube"
           ]
         }
       ]
