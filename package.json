@@ -1,0 +1,25 @@
+{
+  "name": "direthecreative",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "node scripts/prepare-vimeo.mjs && astro dev",
+    "build": "node scripts/prepare-vimeo.mjs && astro build",
+    "preview": "astro preview",
+    "test": "node scripts/test-vimeo.mjs",
+    "data": "node scripts/check-data.mjs",
+    "check": "node scripts/check-build.mjs",
+    "platforms": "node scripts/make-platforms.mjs",
+    "cms": "npx decap-server",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "simple-icons": "^16.38.1"
+  }
+}

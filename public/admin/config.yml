@@ -1,0 +1,222 @@
+backend:
+  name: github
+  repo: VentatheBlack/portfolio
+  branch: main
+  base_url: https://direthecreative.pages.dev
+
+local_backend: true
+
+publish_mode: simple
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://direthecreative.pages.dev
+display_url: https://direthecreative.pages.dev
+
+collections:
+  - name: site
+    label: Site info
+    files:
+      - name: site
+        label: Your details
+        file: src/data/site.json
+        fields:
+          - { label: Name, name: name, widget: string }
+          - { label: Role, name: role, widget: string }
+          - { label: Location, name: location, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - label: Hero loop
+            name: hero_media
+            widget: file
+            required: false
+            hint: "Optional GIF or short silent MP4. Keep it under 2 MB."
+          - label: Showreel on Vimeo
+            name: showreel_vimeo
+            widget: string
+            required: false
+            hint: "Paste the Vimeo link. Until then, the glossy placeholder is shown."
+          - { label: About text, name: about_text, widget: text, hint: "Leave a blank line between paragraphs." }
+          - { label: About photo, name: about_photo, widget: image, required: false }
+          - { label: Contact background, name: contact_background, widget: image, required: false, hint: "A dark overlay is added automatically so the contact details stay easy to read." }
+          - { label: Email, name: email, widget: string }
+          - { label: WhatsApp link, name: whatsapp, widget: string, required: false, hint: "For example https://wa.me/234XXXXXXXXXX" }
+          - label: Social links
+            name: socials
+            widget: list
+            label_singular: Link
+            required: false
+            summary: "{{fields.platform}}"
+            fields:
+              - label: Platform
+                name: platform
+                widget: select
+                options:
+                  - { label: YouTube, value: youtube }
+                  - { label: TikTok, value: tiktok }
+                  - { label: Instagram, value: instagram }
+                  - { label: Spotify, value: spotify }
+                  - { label: Apple Podcasts, value: applepodcasts }
+                  - { label: Facebook, value: facebook }
+                  - { label: X, value: x }
+              - { label: Link, name: url, widget: string }
+          - { label: Contact heading, name: contact_heading, widget: string, default: "Let’s work together" }
+          - { label: Moving contact text, name: contact_ticker, widget: string, default: "LET’S CREATE 〰 GET IN TOUCH" }
+          - { label: Primary accent, name: accent_primary, widget: string, default: "#DCD0FF", pattern: ['^#[0-9A-Fa-f]{6}$', "Use a six-digit hex colour such as #DCD0FF"] }
+          - { label: Secondary accent, name: accent_secondary, widget: string, default: "#C0C0C0", pattern: ['^#[0-9A-Fa-f]{6}$', "Use a six-digit hex colour such as #C0C0C0"] }
+          - label: Colours
+            name: theme
+            widget: select
+            default: dark
+            options:
+              - { label: Dark, value: dark }
+              - { label: Light, value: light }
+              - { label: Follow the visitor's device, value: auto }
+          - { label: Browser tab title, name: page_title, widget: string }
+          - { label: Description for Google, name: seo_description, widget: text }
+
+  - name: services
+    label: Services and rates
+    files:
+      - name: services
+        label: Services
+        file: src/data/services.json
+        fields:
+          - label: Services
+            name: items
+            widget: list
+            label_singular: Service
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - label: Tags
+                name: tags
+                widget: list
+                required: false
+                field: { label: Tag, name: tag, widget: string }
+              - { label: Rate label, name: rate_label, widget: string, required: false, hint: "For example: Starting at" }
+              - { label: Rate, name: rate, widget: string, required: false }
+              - { label: Picture, name: image, widget: image, required: false }
+
+  - name: work
+    label: Portfolio work
+    files:
+      - name: work
+        label: Videos and thumbnails
+        file: src/data/work.json
+        fields:
+          - label: Work tabs
+            name: sections
+            widget: list
+            label_singular: Tab
+            summary: "{{fields.title}}"
+            hint: "Case studies are managed in their own area and appear automatically as the fifth tab."
+            fields:
+              - { label: Tab name, name: title, widget: string }
+              - { label: Short line under the tabs, name: blurb, widget: text, required: false }
+              - label: Video shape
+                name: shape
+                widget: select
+                default: wide
+                options:
+                  - { label: Wide, value: wide }
+                  - { label: Vertical, value: vertical }
+              - label: Videos
+                name: videos
+                widget: list
+                label_singular: Video
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - label: Vimeo link
+                    name: vimeo
+                    widget: string
+                    hint: "Paste the Vimeo link"
+                    pattern: ['^(https?://)?(www\.|player\.)?vimeo\.com/.+', "This must be a Vimeo link"]
+                  - label: Also on
+                    name: platforms
+                    widget: select
+                    multiple: true
+                    required: false
+                    options:
+                      - { label: YouTube, value: youtube }
+                      - { label: TikTok, value: tiktok }
+                      - { label: Instagram, value: instagram }
+                      - { label: Spotify, value: spotify }
+                      - { label: Apple Podcasts, value: applepodcasts }
+                      - { label: Facebook, value: facebook }
+                      - { label: X, value: x }
+                  - { label: Person's social tag, name: tag, widget: string, required: false }
+                  - { label: Link for that tag, name: tag_link, widget: string, required: false }
+                  - { label: What I did, name: note, widget: string, required: false }
+              - label: Thumbnails
+                name: thumbnails
+                widget: list
+                label_singular: Thumbnail
+                required: false
+                summary: "{{fields.title}}"
+                hint: "Export at 1280 x 720 as a JPG under 500 KB."
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Picture, name: image, widget: image }
+                  - label: Also on
+                    name: platforms
+                    widget: select
+                    multiple: true
+                    required: false
+                    options:
+                      - { label: YouTube, value: youtube }
+                      - { label: TikTok, value: tiktok }
+                      - { label: Instagram, value: instagram }
+                      - { label: Spotify, value: spotify }
+                      - { label: Apple Podcasts, value: applepodcasts }
+                      - { label: Facebook, value: facebook }
+                      - { label: X, value: x }
+                  - { label: Person's social tag, name: tag, widget: string, required: false }
+                  - { label: Link for that tag, name: tag_link, widget: string, required: false }
+
+  - name: cases
+    label: Case studies
+    label_singular: Case study
+    folder: src/data/cases
+    extension: json
+    format: json
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{title}}"
+    fields:
+      - { label: Client or project name, name: title, widget: string }
+      - { label: Position in the tab, name: order, widget: number, value_type: int, default: 100, min: 1 }
+      - label: Vimeo link for the main video
+        name: vimeo
+        widget: string
+        pattern: ['^(https?://)?(www\.|player\.)?vimeo\.com/.+', "This must be a Vimeo link"]
+      - label: Category
+        name: category
+        widget: select
+        default: Short form
+        options: [Short form, Long form, Podcast]
+      - { label: Year, name: year, widget: string, required: false }
+      - { label: Project name, name: project, widget: string, required: false }
+      - { label: Result in one line, name: result, widget: string, required: false }
+      - { label: Project brief, name: brief, widget: text, required: false }
+      - { label: The approach, name: approach, widget: text, required: false }
+      - { label: Results, name: results, widget: text, required: false }
+      - { label: Their comment, name: comment, widget: text, required: false }
+      - { label: Who said it, name: comment_by, widget: string, required: false }
+      - { label: Their social tag, name: tag, widget: string, required: false }
+      - { label: Link for that tag, name: tag_link, widget: string, required: false }
+      - label: Also on
+        name: platforms
+        widget: select
+        multiple: true
+        required: false
+        options:
+          - { label: YouTube, value: youtube }
+          - { label: TikTok, value: tiktok }
+          - { label: Instagram, value: instagram }
+          - { label: Spotify, value: spotify }
+          - { label: Apple Podcasts, value: applepodcasts }
+          - { label: Facebook, value: facebook }
+          - { label: X, value: x }

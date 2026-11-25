@@ -1,0 +1,59 @@
+---
+import '../styles/global.css';
+import site from '../data/site.json';
+import PlayerScript from '../components/PlayerScript.astro';
+
+const { title, description, home = false } = Astro.props;
+const theme = ['dark', 'light', 'auto'].includes(site.theme) ? site.theme : 'dark';
+const colour = (value, fallback) => /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback;
+const primary = colour(site.accent_primary, '#DCD0FF');
+const secondary = colour(site.accent_secondary, '#C0C0C0');
+const rootHref = home ? '#top' : '/';
+---
+<!doctype html>
+<html lang="en" data-theme={theme} style={`--accent: ${primary}; --accent-2: ${secondary};`}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#090909" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar">
+      <a class="brand" href={rootHref} aria-label="direthecreative home">
+        <span class="brand-word" aria-hidden="true">
+          <span class="brand-dire">dire</span><span class="brand-the">the</span><span class="brand-creative">creative</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href={home ? '#work' : '/#work'}>Work</a>
+        <a href={home ? '#about' : '/#about'}>About</a>
+        <a href={home ? '#services' : '/#services'}>Services</a>
+        <a href={home ? '#contact' : '/#contact'}>Contact</a>
+      </nav>
+    </header>
+
+    <slot />
+
+    <footer class="site-footer">
+      <span>© {new Date().getFullYear()} {site.name}</span>
+      <a href="#top">Back to top ↑</a>
+    </footer>
+
+    <dialog id="player" aria-label="Media viewer">
+      <button class="player-close" type="button" data-close aria-label="Close media viewer">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path></svg>
+      </button>
+      <div class="player-box"></div>
+    </dialog>
+
+    <PlayerScript />
+  </body>
+</html>

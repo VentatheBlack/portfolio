@@ -1,0 +1,382 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import site from '../data/site.json';
+import work from '../data/work.json';
+import services from '../data/services.json';
+import { parseVimeo } from '../lib/vimeo.js';
+import { buildThumbnail, buildVideo, loadCases, paragraphs, slugify, vimeoInfo } from '../lib/content.js';
+import { PLATFORMS, getIcon } from '../lib/platforms.js';
+
+const showreel = parseVimeo(site.showreel_vimeo);
+const showreelInfo = showreel ? vimeoInfo(showreel.id) : {};
+const showreelRatio = showreelInfo.width && showreelInfo.height
+  ? Number((showreelInfo.width / showreelInfo.height).toFixed(4))
+  : 1.7778;
+const heroFile = site.hero_media || '';
+const heroIsVideo = /\.(mp4|webm)$/i.test(heroFile);
+const heroImage = heroFile && !heroIsVideo ? heroFile : (!heroFile && showreelInfo.thumb ? showreelInfo.thumb : '');
+const hasHeroVisual = Boolean(heroFile || heroImage);
+
+const socials = (site.socials || []).filter((item) => item.url && getIcon(item.platform));
+const socialHandle = (item) => {
+  try {
+    const path = new URL(item.url).pathname.split('/').filter(Boolean).pop() || '';
+    return path ? (path.startsWith('@') ? path : `@${path}`) : getIcon(item.platform).label;
+  } catch (error) {
+    return getIcon(item.platform).label;
+  }
+};
+
+const aboutParagraphs = paragraphs(site.about_text);
+const serviceItems = (services.items || []).filter((item) => item.title);
+
+const mediaSections = (work.sections || []).map((section) => {
+  const videos = (section.videos || []).map((item) => buildVideo(item, section.shape)).filter(Boolean);
+  const thumbnails = (section.thumbnails || []).map((item) => buildThumbnail(item)).filter(Boolean);
+  return {
+    ...section,
+    slug: slugify(section.title) || 'section',
+    videos,
+    thumbnails,
+    cases: [],
+    count: videos.length + thumbnails.length,
+  };
+});
+
+const caseItems = loadCases()
+  .map((item) => ({ ...item, video: buildVideo({ vimeo: item.vimeo, title: item.title }, 'wide') }))
+  .filter((item) => item.video);
+
+const sections = [
+  ...mediaSections,
+  {
+    title: 'Case studies',
+    slug: 'case-studies',
+    blurb: '',
+    shape: 'wide',
+    videos: [],
+    thumbnails: [],
+    cases: caseItems,
+    count: caseItems.length,
+  },
+];
+
+const whatsappDigits = String(site.whatsapp || '').match(/wa\.me\/(\d+)/)?.[1] || '';
+const whatsappDisplay = whatsappDigits.startsWith('234') && whatsappDigits.length === 13
+  ? `+234 ${whatsappDigits.slice(3, 6)} ${whatsappDigits.slice(6, 9)} ${whatsappDigits.slice(9)}`
+  : 'WhatsApp';
+const tickerText = site.contact_ticker || 'LET’S CREATE 〰 GET IN TOUCH';
+const playIcon = 'M8 5.5v13l11-6.5z';
+const title = site.page_title || `${site.name} | ${site.role}`;
+---
+
+<Base title={title} description={site.seo_description} home={true}>
+  <main id="main">
+    <section class="hero" id="top" aria-label="Showreel">
+      {hasHeroVisual ? (
+        <div class="hero-media" aria-hidden="true">
+          {heroIsVideo ? (
+            <video src={heroFile} autoplay muted loop playsinline preload="metadata"></video>
+          ) : (
+            <img src={heroImage} alt="" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async" />
+          )}
+        </div>
+      ) : (
+        <div class="hero-placeholder" aria-hidden="true"></div>
+      )}
+      <div class="hero-shade"></div>
+
+      <div class="hero-center">
+        <p class="hero-title">Showreel</p>
+        {showreel ? (
+          <button
+            class="watch-button"
+            type="button"
+            data-play
+            data-vimeo-id={showreel.id}
+            data-vimeo-hash={showreel.hash}
+            data-title={`${site.name} showreel`}
+            data-ratio={showreelRatio}
+          >
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d={playIcon} fill="currentColor"></path></svg>
+            Watch with sound
+          </button>
+        ) : (
+          <p class="hero-status">Coming soon</p>
+        )}
+      </div>
+
+      <a class="scroll-cue" href="#work">Scroll for more <span aria-hidden="true">↓</span></a>
+    </section>
+
+    <section class="work wrap" id="work" aria-labelledby="work-title">
+      <div class="work-head">
+        <div>
+          <p class="eyebrow">Portfolio</p>
+          <h2 class="section-heading" id="work-title">Selected work</h2>
+        </div>
+        <p class="work-note">Choose a category to view the work.</p>
+      </div>
+
+      <div class="tabs-scroll">
+        <div class="tablist" role="tablist" aria-label="Types of work">
+          {sections.map((section, index) => (
+            <button
+              class="tab"
+              role="tab"
+              type="button"
+              id={`tab-${index}`}
+              data-slug={section.slug}
+              aria-controls={`panel-${index}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? 0 : -1}
+            >{section.title}</button>
+          ))}
+        </div>
+      </div>
+
+      {sections.map((section, index) => (
+        <div
+          class={`panel${index === 0 && section.count === 0 ? ' animate' : ''}`}
+          role="tabpanel"
+          id={`panel-${index}`}
+          aria-labelledby={`tab-${index}`}
+          data-shape={section.shape}
+          hidden={index !== 0}
+        >
+          {section.blurb && <p class="panel-blurb">{section.blurb}</p>}
+
+          {section.count === 0 ? (
+            <>
+              <p class="coming-label"><span>Projects coming soon</span></p>
+              <p class="sr-only">Projects will be added to this category soon.</p>
+              <ul class="work-grid skeleton-grid" aria-hidden="true">
+                {Array.from({ length: 6 }).map(() => (
+                  <li class="skeleton-card">
+                    <div class="skeleton-media"></div>
+                    <div class="skeleton-copy"><span class="skeleton-line"></span><span class="skeleton-line"></span></div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <ul class="work-grid">
+              {section.videos.map((video) => (
+                <li>
+                  <article class="media-button">
+                    <button
+                      class="media-frame"
+                      type="button"
+                      data-play
+                      data-vimeo-id={video.id}
+                      data-vimeo-hash={video.hash}
+                      data-title={video.title}
+                      data-ratio={video.ratioNumber}
+                      style={`aspect-ratio: ${video.ratio}`}
+                      aria-label={`Play video: ${video.title}`}
+                    >
+                      {video.thumb ? (
+                        <img src={video.thumb} alt="" width={video.thumbWidth} height={video.thumbHeight} loading="lazy" decoding="async" />
+                      ) : (
+                        <span class="media-fallback"></span>
+                      )}
+                      {video.platforms.length > 0 && (
+                        <span class="badges">
+                          {video.platforms.map((key) => <span class="badge" title={PLATFORMS[key].label}><Icon name={key} size={15} /></span>)}
+                        </span>
+                      )}
+                      <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d={playIcon} fill="currentColor"></path></svg></span>
+                    </button>
+                    <div class="caption">
+                      <h3>{video.title}</h3>
+                      {video.tag && (video.tagLink
+                        ? <a class="handle" href={video.tagLink} target="_blank" rel="noopener">{video.tag}</a>
+                        : <span class="handle">{video.tag}</span>)}
+                      {video.note && <p class="note">{video.note}</p>}
+                    </div>
+                  </article>
+                </li>
+              ))}
+
+              {section.thumbnails.map((thumb) => (
+                <li>
+                  <article class="media-button">
+                    <button
+                      class="media-frame"
+                      type="button"
+                      data-image={thumb.image}
+                      data-title={thumb.title}
+                      data-ratio="1.7778"
+                      style="aspect-ratio: 16 / 9"
+                      aria-label={`View thumbnail: ${thumb.title}`}
+                    >
+                      <img src={thumb.image} alt={thumb.title} width="1280" height="720" loading="lazy" decoding="async" />
+                      {thumb.platforms.length > 0 && (
+                        <span class="badges">
+                          {thumb.platforms.map((key) => <span class="badge" title={PLATFORMS[key].label}><Icon name={key} size={15} /></span>)}
+                        </span>
+                      )}
+                    </button>
+                    <div class="caption">
+                      <h3>{thumb.title}</h3>
+                      {thumb.tag && (thumb.tagLink
+                        ? <a class="handle" href={thumb.tagLink} target="_blank" rel="noopener">{thumb.tag}</a>
+                        : <span class="handle">{thumb.tag}</span>)}
+                    </div>
+                  </article>
+                </li>
+              ))}
+
+              {section.cases.map((item) => (
+                <li>
+                  <a class="case-link" href={`/work/${item.slug}/`}>
+                    <span class="media-frame" style={`aspect-ratio: ${item.video.ratio}`}>
+                      {item.video.thumb ? (
+                        <img src={item.video.thumb} alt="" width={item.video.thumbWidth} height={item.video.thumbHeight} loading="lazy" decoding="async" />
+                      ) : (
+                        <span class="media-fallback"></span>
+                      )}
+                      <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d={playIcon} fill="currentColor"></path></svg></span>
+                    </span>
+                    <span class="caption">
+                      <h3>{item.title}</h3>
+                      <span class="case-meta">{[item.category, item.year].filter(Boolean).join(' · ')}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+      <noscript><style>.panel[hidden] { display: block !important; margin-top: 70px; }</style></noscript>
+    </section>
+
+    <section class="about wrap" id="about" aria-labelledby="about-title">
+      <div>
+        {site.about_photo && (
+          <img class="about-photo" src={site.about_photo} alt={`TEMIDIRE, ${site.role}`} width="1200" height="1600" loading="lazy" decoding="async" />
+        )}
+      </div>
+      <div>
+        <p class="eyebrow">About</p>
+        <h2 class="about-name" id="about-title">{site.name}</h2>
+        <p class="about-role">{[site.role, site.location].filter(Boolean).join(' · ')}</p>
+        {site.tagline && <p class="about-tagline">{site.tagline}</p>}
+        <div class="about-copy">
+          {aboutParagraphs.map((text) => <p>{text}</p>)}
+        </div>
+        <div class="about-links">
+          <a href={`mailto:${site.email}`}>Email ↗</a>
+          {socials.map((item) => (
+            <a href={item.url} target="_blank" rel="noopener">{getIcon(item.platform).label} ↗</a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="services wrap" id="services" aria-labelledby="services-title">
+      <p class="eyebrow">What I do</p>
+      <h2 class="section-heading" id="services-title">Services and rates</h2>
+      <div class="service-list">
+        {serviceItems.map((item, index) => (
+          <article class="service">
+            <span class="service-number">{String(index + 1).padStart(2, '0')}</span>
+            <h3>{item.title}</h3>
+            <p class="service-description">{item.description}</p>
+            <div class="service-side">
+              {(item.tags || []).length > 0 && <ul class="tags">{item.tags.map((tag) => <li>{tag}</li>)}</ul>}
+              {item.rate && <p class="rate">{item.rate_label}<strong>{item.rate}</strong></p>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      {site.contact_background && (
+        <img class="contact-background" src={site.contact_background} alt="" width="2000" height="1500" loading="lazy" decoding="async" />
+      )}
+      <div class="contact-inner">
+        <p class="eyebrow">Get in touch</p>
+        <h2 class="contact-title" id="contact-title">{site.contact_heading || 'Let’s work together'}</h2>
+        <ul class="contact-list">
+          {site.whatsapp && (
+            <li class="contact-item">
+              <span class="contact-label">WhatsApp</span>
+              <a href={site.whatsapp} target="_blank" rel="noopener">{whatsappDisplay}</a>
+            </li>
+          )}
+          <li class="contact-item">
+            <span class="contact-label">Email</span>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </li>
+          {socials.map((item) => (
+            <li class="contact-item">
+              <span class="contact-label">{getIcon(item.platform).label}</span>
+              <a href={item.url} target="_blank" rel="noopener">{socialHandle(item)}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          <span>{tickerText} 〰 {tickerText} 〰 {tickerText} 〰 {tickerText} 〰</span>
+          <span>{tickerText} 〰 {tickerText} 〰 {tickerText} 〰 {tickerText} 〰</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var list = document.querySelector('.tablist');
+      if (!list) return;
+      var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
+
+      function animateEmpty(panel) {
+        if (!panel || !panel.querySelector('.skeleton-card')) return;
+        panel.classList.remove('animate');
+        void panel.offsetWidth;
+        panel.classList.add('animate');
+      }
+
+      function select(tab, moveFocus, updateHash) {
+        tabs.forEach(function (item) {
+          var on = item === tab;
+          item.setAttribute('aria-selected', on ? 'true' : 'false');
+          item.tabIndex = on ? 0 : -1;
+          var panel = document.getElementById(item.getAttribute('aria-controls'));
+          if (panel) panel.hidden = !on;
+          if (on) animateEmpty(panel);
+        });
+        if (moveFocus) tab.focus();
+        tab.scrollIntoView({ block: 'nearest', inline: 'center' });
+        if (updateHash && history.replaceState) history.replaceState(null, '', '#' + tab.getAttribute('data-slug'));
+      }
+
+      tabs.forEach(function (tab, index) {
+        tab.addEventListener('click', function () { select(tab, false, true); });
+        tab.addEventListener('keydown', function (event) {
+          var next = null;
+          if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
+          else if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
+          else if (event.key === 'Home') next = tabs[0];
+          else if (event.key === 'End') next = tabs[tabs.length - 1];
+          if (next) { event.preventDefault(); select(next, true, true); }
+        });
+      });
+
+      var wanted = location.hash.replace('#', '');
+      if (wanted) {
+        var match = tabs.filter(function (tab) { return tab.getAttribute('data-slug') === wanted; })[0];
+        if (match) {
+          select(match, false, false);
+          var workSection = document.getElementById('work');
+          if (workSection) workSection.scrollIntoView();
+        }
+      }
+    })();
+  </script>
+</Base>

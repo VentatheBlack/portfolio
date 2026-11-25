@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "title": "Short form video",
+      "description": "I turn raw footage and ideas into engaging short-form videos with clear structure, thoughtful pacing, sound, and visuals.",
+      "tags": ["Short-form", "Reels"],
+      "rate_label": "Starting at",
+      "rate": "₦35,000 per 60-second video (from up to about 30 minutes of raw footage)",
+      "image": ""
+    },
+    {
+      "title": "Long form video",
+      "description": "I shape longer footage into focused videos with a clear structure and natural flow from beginning to end.",
+      "tags": ["Long-form", "Storytelling"],
+      "rate_label": "Starting at",
+      "rate": "₦80,000 · custom pricing based on the project",
+      "image": ""
+    },
+    {
+      "title": "Podcast",
+      "description": "I turn podcast conversations into polished episodes and create up to 20 engaging short clips for social media.",
+      "tags": ["Podcast editing", "Short clips", "Social media"],
+      "rate_label": "Pricing",
+      "rate": "Custom pricing",
+      "image": ""
+    }
+  ]
+}

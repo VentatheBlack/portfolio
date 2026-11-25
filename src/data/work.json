@@ -1,0 +1,32 @@
+{
+  "sections": [
+    {
+      "title": "Long form",
+      "blurb": "",
+      "shape": "wide",
+      "videos": [],
+      "thumbnails": []
+    },
+    {
+      "title": "Short form",
+      "blurb": "",
+      "shape": "vertical",
+      "videos": [],
+      "thumbnails": []
+    },
+    {
+      "title": "Podcasts",
+      "blurb": "",
+      "shape": "wide",
+      "videos": [],
+      "thumbnails": []
+    },
+    {
+      "title": "Thumbnails",
+      "blurb": "",
+      "shape": "wide",
+      "videos": [],
+      "thumbnails": []
+    }
+  ]
+}

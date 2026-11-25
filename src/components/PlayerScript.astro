@@ -1,0 +1,93 @@
+---
+// One small script for all lazy Vimeo players and full-size thumbnail previews.
+---
+<script is:inline>
+  (function () {
+    var dialog = document.getElementById('player');
+    var box = dialog ? dialog.querySelector('.player-box') : null;
+    var lastOpener = null;
+    var warmed = false;
+
+    function warmUp() {
+      if (warmed) return;
+      warmed = true;
+      var link = document.createElement('link');
+      link.rel = 'preconnect';
+      link.href = 'https://player.vimeo.com';
+      document.head.appendChild(link);
+    }
+
+    function closest(event, attribute) {
+      return event.target && event.target.closest ? event.target.closest('[' + attribute + ']') : null;
+    }
+
+    function makeFrame(element) {
+      var id = element.getAttribute('data-vimeo-id');
+      var hash = element.getAttribute('data-vimeo-hash');
+      var frame = document.createElement('iframe');
+      frame.src = 'https://player.vimeo.com/video/' + id + '?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1' + (hash ? '&h=' + hash : '');
+      frame.title = element.getAttribute('data-title') || 'Video';
+      frame.allow = 'autoplay; fullscreen; picture-in-picture';
+      frame.setAttribute('allowfullscreen', '');
+      return frame;
+    }
+
+    document.addEventListener('pointerover', function (event) {
+      if (closest(event, 'data-vimeo-id')) warmUp();
+    }, { passive: true });
+    document.addEventListener('touchstart', function (event) {
+      if (closest(event, 'data-vimeo-id')) warmUp();
+    }, { passive: true });
+
+    document.addEventListener('click', function (event) {
+      var inline = closest(event, 'data-inline');
+      if (inline) {
+        warmUp();
+        var spot = document.createElement('div');
+        spot.className = inline.className;
+        spot.setAttribute('style', inline.getAttribute('style') || '');
+        spot.appendChild(makeFrame(inline));
+        inline.replaceWith(spot);
+        return;
+      }
+
+      var opener = closest(event, 'data-play');
+      if (opener && dialog && box) {
+        event.preventDefault();
+        warmUp();
+        lastOpener = opener;
+        box.innerHTML = '';
+        box.style.setProperty('--r', opener.getAttribute('data-ratio') || '1.7778');
+        box.appendChild(makeFrame(opener));
+        if (dialog.showModal) dialog.showModal();
+        else dialog.setAttribute('open', '');
+        return;
+      }
+
+      var picture = closest(event, 'data-image');
+      if (picture && dialog && box) {
+        event.preventDefault();
+        lastOpener = picture;
+        box.innerHTML = '';
+        box.style.setProperty('--r', picture.getAttribute('data-ratio') || '1.7778');
+        var big = document.createElement('img');
+        big.src = picture.getAttribute('data-image');
+        big.alt = picture.getAttribute('data-title') || '';
+        box.appendChild(big);
+        if (dialog.showModal) dialog.showModal();
+        else dialog.setAttribute('open', '');
+        return;
+      }
+
+      if (dialog && (event.target === dialog || closest(event, 'data-close'))) dialog.close();
+    });
+
+    if (dialog) {
+      dialog.addEventListener('close', function () {
+        if (box) box.innerHTML = '';
+        if (lastOpener && lastOpener.focus) lastOpener.focus();
+        lastOpener = null;
+      });
+    }
+  })();
+</script>

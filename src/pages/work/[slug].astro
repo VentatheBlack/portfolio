@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import site from '../../data/site.json';
+import { buildVideo, loadCases, paragraphs } from '../../lib/content.js';
+import { PLATFORMS } from '../../lib/platforms.js';
+
+export function getStaticPaths() {
+  return loadCases().map((item) => ({ params: { slug: item.slug }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const video = buildVideo({ vimeo: item.vimeo, title: item.title }, item.category === 'Short form' ? 'vertical' : 'wide');
+const facts = [
+  ['Project', item.project],
+  ['Year', item.year],
+  ['Category', item.category],
+  ['Result', item.result],
+].filter(([, value]) => value);
+const blocks = [
+  ['Project Brief', paragraphs(item.brief)],
+  ['The Approach', paragraphs(item.approach)],
+  ['Results', paragraphs(item.results)],
+].filter(([, list]) => list.length > 0);
+const platforms = (item.platforms || []).filter((key) => PLATFORMS[key]);
+const title = `${item.title} | ${site.name}`;
+const description = item.result || item.project || site.seo_description;
+const playIcon = 'M8 5.5v13l11-6.5z';
+---
+
+<Base title={title} description={description}>
+  <main class="case-page" id="main">
+    <div class="wrap">
+      <a class="case-back" href="/#case-studies"><span aria-hidden="true">←&nbsp;</span> Back to case studies</a>
+      <button
+        class="media-frame case-video"
+        type="button"
+        data-inline
+        data-vimeo-id={video.id}
+        data-vimeo-hash={video.hash}
+        data-title={item.title}
+        style={`aspect-ratio: ${video.ratio}`}
+        aria-label={`Play video: ${item.title}`}
+      >
+        {video.thumb ? (
+          <img src={video.thumb} alt="" width={video.thumbWidth} height={video.thumbHeight} loading="eager" fetchpriority="high" decoding="async" />
+        ) : (
+          <span class="media-fallback"></span>
+        )}
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d={playIcon} fill="currentColor"></path></svg></span>
+      </button>
+    </div>
+
+    <div class="case-intro">
+      <p class="eyebrow">Case study</p>
+      <h1 class="case-title">{item.title}</h1>
+
+      {(item.tag || platforms.length > 0) && (
+        <div class="case-links">
+          {item.tag && (item.tag_link
+            ? <a class="handle" href={item.tag_link} target="_blank" rel="noopener">{item.tag} ↗</a>
+            : <span class="handle">{item.tag}</span>)}
+          {platforms.map((key) => <span class="badge" title={`Also on ${PLATFORMS[key].label}`}><Icon name={key} size={15} /></span>)}
+        </div>
+      )}
+
+      {facts.length > 0 && (
+        <dl class="facts">
+          {facts.map(([label, value]) => <div class="fact"><dt>{label}</dt><dd>{value}</dd></div>)}
+        </dl>
+      )}
+
+      {blocks.map(([heading, list]) => (
+        <section class="case-block">
+          <h2>{heading}</h2>
+          <div class="case-block-copy">{list.map((text) => <p>{text}</p>)}</div>
+        </section>
+      ))}
+
+      {item.comment && (
+        <blockquote class="comment">
+          <p>“{item.comment}”</p>
+          {item.comment_by && <footer>{item.comment_by}</footer>}
+        </blockquote>
+      )}
+
+      <a class="case-cta" href="/#contact">Work with me&nbsp; →</a>
+    </div>
+  </main>
+</Base>
