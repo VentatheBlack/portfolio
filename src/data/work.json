@@ -31,8 +31,17 @@
     {
       "title": "Podcasts",
       "blurb": "",
-      "shape": "wide",
-      "videos": [],
+      "shape": "vertical",
+      "videos": [
+        {
+          "vimeo": "https://vimeo.com/1250722537?fl=ip&fe=ec&share=copy",
+          "title": "Podcast Edit #1"
+        },
+        {
+          "title": "Podcast #2",
+          "vimeo": "https://vimeo.com/1250722538?fl=ip&fe=ec&share=copy"
+        }
+      ],
       "thumbnails": []
     },
     {
